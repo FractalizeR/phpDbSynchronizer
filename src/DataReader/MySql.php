@@ -38,10 +38,13 @@ class  FRDBS_DataReader_MySql implements FRDBS_DataReader_Interface {
      * @param string $timestamp Timestamp value of the last synchronization
      */
     public function __construct($tableName, $timeStampFieldName, $timestamp) {
+        $timestamp         = mysql_real_escape_string($timestamp);
         $this->mysqlResult = mysql_query("SELECT * FROM `$tableName` WHERE `$timeStampFieldName` > '$timestamp'");
+
         if (false === $this->mysqlResult) {
             throw new Exception("Error executing query: " . mysql_error());
         }
+
         $this->currentRow = mysql_fetch_assoc($this->mysqlResult);
     }
 
